@@ -1,0 +1,248 @@
+<template>
+  <div class="login">
+    <m-logo/>
+    <div class="login-body login-box">
+      <span class="tishi" :style="{'visibility': ishidden}">{{tishi}}</span>
+        <template v-if="!isforget">
+          <div class="box">商家登录</div>
+          <form @submit.prevent="submit">
+            <div class="form-field">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#el-icon-shouji"></use>
+              </svg>
+              <input type="tel" name="tel" id="tel" placeholder="输入手机号" v-model="tel">
+            </div>
+            <div class="form-field">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#el-icon-password"></use>
+              </svg>
+              <input type="password" name="pwd" id="pwd" placeholder="输入密码" v-model="pwd">
+            </div>
+            <p class="forget"><button @click="forget">忘记密码？</button></p> 
+            <button value="登 录" class="login-btn" @click="onSubmit">登 录</button>
+            <p>还没有店铺？<router-link to="/busienter">立即入驻</router-link></p>
+          </form>
+        </template>
+        <template v-else>
+          <div class="box">找回密码 
+            <button @click="login">返回登录</button>
+          </div>
+          <form @submit.prevent="submit" class="login-box">
+            <div class="form-field">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#el-icon-shouji"></use>
+              </svg>
+              <input type="tel" name="tel" id="tel" placeholder="输入手机号" v-model="tel">
+            </div>
+            <div class="form-field">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#el-icon-password"></use>
+              </svg>
+              <input type="password" name="pwd" id="pwd" placeholder="输入新密码" v-model="pwd">
+            </div>
+            <div class="form-field">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#el-icon-password"></use>
+              </svg>
+              <input type="password" name="repwd" id="repwd" placeholder="再次输入密码" v-model="repwd">
+            </div>
+            <div class="form-field code">
+              <input type="text" name="code" id="code" placeholder="输入验证码" v-model="code">
+              <button @click="sendTel" :disabled="issend" :class="{'send': issend }">{{sendText}}</button>
+            </div>
+            <button class="login-btn" @click="onSubmit">更 改 并 登 录</button>
+          </form>
+        </template>
+    </div>
+    <m-footer/>
+  </div>
+</template>
+
+<script>
+import mLogo from '@/components/public/header/logo.vue' 
+import mFooter from '@/components/public/footer/index.vue'
+import utils from '@/assets/js/utils.js'
+require('@/assets/style/login.css')
+  export default {
+    components: {
+      mLogo,
+      mFooter
+    },
+    data() {
+      return {
+        tel: '',
+        pwd: '',
+        repwd: '',
+        tishi: '',
+        ishidden: 'hidden',
+        isforget: false,
+        sendText: '发送验证码',
+        issend: false,
+        code: ''
+      }
+    },
+    methods: {
+      submit() {
+        return false
+      },
+      onSubmit() {
+        const checktel = /\d{11}/
+        if(!checktel.test(this.tel)) {
+          this.tishi = '请输入正确的手机号'
+          this.ishidden = 'visible'
+          return
+        } else {
+          this.tishi = ''
+          this.ishidden = 'hidden'
+        }
+        if(this.pwd.length < 6) {
+          this.tishi = "密码数应不少于 6 位"
+          this.ishidden = "visible"
+          return
+        }
+        const vm = this
+        const enpwd = utils.encrypto(this.pwd)
+        let data = {
+          "tel": this.tel,
+          "pwd": enpwd
+        }
+        // 判断是否忘记密码
+        if(this.isforget) {
+          if(this.repwd !== this.pwd) {
+            this.tishi = "两次输入的密码不相同"
+            this.ishidden = "visible"
+            this.repwd = ''
+            return
+          }
+          if(this.code.length === 0) {
+            this.tishi = "验证码不能为空"
+            this.ishidden = "visible"
+            return
+          }
+          data = {
+            "tel": this.tel,
+            "pwd": enpwd,
+            code: this.code
+          }
+        }
+        this.$axios({
+          method: "post",
+          url: "/busi/login",
+          data: data
+        }).then(res => {
+          window.console.log(res)
+          if(res.data.code === 1 && res.status === 200) {
+            vm.tishi = res.data.msg
+            vm.ishidden = 'visible'
+            vm.$store.commit("BIND_BLOGIN", res.data.token)
+            vm.$store.commit("SAVE_BNAME", res.data.name)
+            vm.$store.commit("SAVE_BTEL", res.data.tel)
+            // vm.$store.commit("SAVE_BSTATE", res.data.state)
+            // vm.$store.commit('SAVE_BTAGS', res.data.tags)
+            let that = vm
+            setTimeout(() => {
+              that.$router.replace('/business')
+            }, 300);
+          } else {
+            vm.tishi = res.data.msg
+            vm.ishidden = 'visible'
+          }
+        }).catch(err => {
+          vm.tishi = '连接错误，登录失败'
+          vm.ishidden = 'visible'
+          window.console.log(err)
+        })
+      },
+      forget() {
+        this.isforget = true
+      },
+      login() {
+        this.isforget = false
+      },
+      sendTel() {
+        let vm = this
+        const telNum = /\d{11}/
+        const trim = /\s+/g
+        if(this.tel.replace(trim, '').length === 0 || !telNum.test(this.tel)) {
+          alert('请输入正确的手机号！')
+          return false
+        }
+        this.$axios({
+          method: 'post',
+          url: '/sendsms',
+          data: {
+            tel: this.tel,
+          }
+        }).then(res => {
+          if(res.data && res.status === 200) {
+            let {code, msg} = res.data
+            if(code === 1) {
+              this.tishi = msg
+              this.ishidden = 'visible'
+              this.issend = true;
+              let time = 90
+              let unit = '秒'
+              vm.sendText = time + unit
+              window.clearInterval(timer)
+              let timer = window.setInterval(function() {
+                time--;
+                if(time > 0) {
+                  vm.sendText = time + unit
+                } else {
+                  vm.sendText = "重新发送"
+                  vm.issend = false
+                  window.clearInterval(timer)
+                }
+              }, 1000)
+            }
+          }
+        }).catch(err => {
+          window.console.log(err)
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .login {
+    background-color: #fff;
+    padding: 50px 250px;
+  }
+  .login-body {
+    margin: 0 auto;
+    width: 270px;
+    padding-bottom: 30px; 
+  }
+  .login-body .box {
+    margin: 20px 0;
+  }
+  .login-body a {
+    color: #888;
+  }
+  .login-body a:hover,
+  .login-body p.forget button:hover {
+    color: #47a7dd
+  }
+  .login-body p {
+    font-size: 14px;
+  }
+  .login-body .forget {
+    overflow: hidden;
+  }
+  .login-body .forget button,
+  .box button {
+    float: right;
+  }
+  
+  .login-body .form-field.code button {
+    background-color: #47a7dd;
+  }
+  .login-body .form-field.code .send {
+    background-color: #285d7c;
+    cursor: no-drop;
+  }
+  .login-body .login-btn {
+    background-color: #47a7dd;
+  }
+</style>

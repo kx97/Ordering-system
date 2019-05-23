@@ -1,0 +1,58 @@
+  
+    .login-box .form-field {
+      width: 100%;
+      height: 36px;
+      border: 1px solid #ccc;
+      margin: 20px 0;
+      background-color: #fff;
+    }
+     .login-box .form-field .icon {
+        float: left;
+        margin-top: 5px;
+      }
+     .login-box .form-field input {
+        width: 90%;
+        height: 100%;
+        box-sizing: border-box;
+        border: none;
+        outline: none;
+        padding: 10px;
+      }
+     .login-box .login-btn {
+        display: block;
+        width: 100%;
+        height: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #fff; 
+      }
+       .login-box .login-btn:hover {
+        opacity: 0.8;
+      }
+     
+      .login-box .tishi {
+        display: block;
+        width: 100%;
+        text-align: center;
+        color: green;
+        background-color: rgb(243, 240, 240);
+        height: 40px;
+        line-height: 40px;
+        border-radius: 5px;
+      }
+    
+      .login-box .code {
+      border: none;
+    }
+    .code button {
+        width: 30%;
+        height: 100%;
+        margin-left: 40px;
+        color: #fff;
+      }
+     .code #code {
+        width: 40%;
+        height: 100%;
+        border: 1px solid #e5e5e5;
+        margin-left: 10px;
+      }

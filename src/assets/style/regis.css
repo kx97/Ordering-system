@@ -1,0 +1,100 @@
+.re-head {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid #47a7dd; 
+    padding: 10px 200px;
+  }
+  .re-head .tologin {
+    position: absolute;
+    right: 200px;
+    top: 50%;
+    margin-top: -15px;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .re-head .tologin a {
+    display: block;
+    float: right;
+    margin-left: 20px;
+    width: 50px;
+    height: 30px;
+    color: #fff;
+    background-color: #47a7dd;
+    text-align: center;
+  }
+  .re-head .tologin a:hover {
+    opacity: 0.8;
+  }
+  .re-content {
+    margin: 50px 100px 50px 300px;
+    width: 700px;
+  }
+  .re-content .form-field {
+    margin: 15px 0;
+    overflow: hidden;
+    height: 36px;
+    line-height: 36px;
+  }
+  .re-content .tishi {
+    display: block;
+    margin-top: -10px;
+    margin-bottom: -8px;
+    margin-left: 120px;
+    font-size: 14px;
+    color: green;
+    height: 16px;
+  }
+  .re-content .form-field label {
+    text-align: right;
+    width: 100px;
+    display: block;
+    float: left;
+  }
+  .re-content .form-field input {
+    width: 260px;
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0 5px 0 10px;
+    padding-left: 10px;
+    float: left;
+    border: 1px solid #e5e5e5;
+    outline: none;
+    background-color: #fff;
+  }
+  .re-content .form-field #msg {
+    width: 150px;
+  }
+  .re-content .form-field .icon {
+    margin-top: 5px;
+  }
+  .re-content .form-field span {
+    font-size: 14px;
+    display: block;
+    color: red;
+  }
+  .re-content .form-field .send-btn {
+    float: left;
+    width: 90px;
+    height: 36px;
+    border: 1px solid #e5e5e5;
+    background-color: #47a7dd;
+    color: #fff;
+    margin-left: 110px;
+  }
+  
+  .re-content .sub-btn {
+    width: 160px;
+    height: 40px;
+    float: none;
+    margin-top: 30px;
+    margin-left: 110px;
+    background-color: #47a7dd;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+  }
+  .re-content .btn-gray {
+    background-color: #285d7c;
+    cursor: no-drop;
+  }
