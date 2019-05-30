@@ -1,4 +1,3 @@
-# waimai
 
 ## Project setup
 ```
