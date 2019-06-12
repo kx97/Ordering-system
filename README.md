@@ -1,28 +1,3 @@
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+该项目主要是完成网上外卖点餐平台的开发，该系统分为首页、用户管理、商家管理、菜单管理、购物车管理、订单管理、退出这几个模块。
+分别在首页模块实现了商家搜索；用户管理模块实现了登录、注册、管理收货地址、查看信息等功能；商家管理实现了登录、注册、商家信息修改等功能；购物车模块实现了查看、结算、修改菜品数量等功能；订单模块实现了查看、删除等功能；菜单管理实现了菜品的添加、删除、修改。
+本项目结构上分为表现层、业务层和数据访问层，层次间的依赖关系自下到上。采用的技术有vue，koa2，MongoDB，axios 等。
